@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineFlow - Full-Length Video Creator</title>
+    <style>
+        /* Professional Dark Theme */
+        body { background: #050505; color: #ffffff; font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; }
+        header { background: #111; padding: 15px; border-bottom: 1px solid #222; text-align: center; font-weight: bold; letter-spacing: 3px; color: cyan; }
+        
+        #workspace { display: flex; height: 80vh; }
+        
+        /* The Preview Window (Where the magic happens) */
+        #preview-area { flex-grow: 1; background: #000; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .actor { width: 200px; position: absolute; cursor: move; border: 1px solid transparent; transition: filter 0.2s; }
+        .actor:hover { border: 1px dashed cyan; }
+
+        /* Controls Panel */
+        #controls { width: 280px; background: #111; border-left: 1px solid #222; padding: 20px; box-sizing: border-box; }
+        h3 { font-size: 14px; color: #888; text-transform: uppercase; margin-bottom: 20px; }
+        .control-group { margin-bottom: 25px; }
+        label { display: block; font-size: 11px; margin-bottom: 8px; color: #666; }
+        input[type=range] { width: 100%; accent-color: cyan; cursor: pointer; }
+        
+        #timeline { height: 15vh; background: #0a0a0a; border-top: 2px solid #222; padding: 10px; display: flex; align-items: center; }
+        .btn { background: cyan; color: black; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+<header>CINEFLOW</header>
+
+<div id="workspace">
+    <div id="preview-area" id="drop-zone">
+        <img src="https://img.icons8.com/fluency/200/user-male-circle.png" class="actor" id="main-actor" draggable="true">
+        <p style="color: #222; position: absolute; bottom: 10px;">Move the asset to start directing</p>
+    </div>
+
+    <div id="controls">
+        <h3>Cinematic Controls</h3>
+        <div class="control-group">
+            <label>EXPOSURE (LIGHT)</label>
+            <input type="range" id="light" min="0" max="200" value="100">
+        </div>
+        <div class="control-group">
+            <label>COLOR GRADE (SHADE)</label>
+            <input type="range" id="shade" min="0" max="100" value="0">
+        </div>
+        <button class="btn">RENDER VIDEO</button>
+    </div>
+</div>
+
+<div id="timeline">
+    <div style="color: #444; font-size: 12px;">Timeline Track 1: [Video Assets Here]</div>
+</div>
+
+<script>
+    const actor = document.getElementById('main-actor');
+    let active = false;
+    let currentX;
+    let currentY;
+    let initialX;
+    let initialY;
+    let xOffset = 0;
+    let yOffset = 0;
+
+    // Movement Logic
+    function dragStart(e) {
+        initialX = (e.type === "touchstart" ? e.touches[0].clientX : e.clientX) - xOffset;
+        initialY = (e.type === "touchstart" ? e.touches[0].clientY : e.clientY) - yOffset;
+        if (e.target === actor) active = true;
+    }
+
+    function dragEnd() {
+        initialX = currentX;
+        initialY = currentY;
+        active = false;
+    }
+
+    function drag(e) {
+        if (active) {
+            e.preventDefault();
+            currentX = (e.type === "touchmove" ? e.touches[0].clientX : e.clientX) - initialX;
+            currentY = (e.type === "touchmove" ? e.touches[0].clientY : e.clientY) - initialY;
+            xOffset = currentX;
+            yOffset = currentY;
+            setTranslate(currentX, currentY, actor);
+        }
+    }
+
+    function setTranslate(xPos, yPos, el) {
+        el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
+    }
+
+    document.addEventListener("touchstart", dragStart, false);
+    document.addEventListener("touchend", dragEnd, false);
+    document.addEventListener("touchmove", drag, false);
+    document.addEventListener("mousedown", dragStart, false);
+    document.addEventListener("mouseup", dragEnd, false);
+    document.addEventListener("mousemove", drag, false);
+
+    // Filter Logic
+    const light = document.getElementById('light');
+    const shade = document.getElementById('shade');
+
+    function updateFilters() {
+        actor.style.filter = `brightness(${light.value}%) grayscale(${shade.value}%)`;
+    }
+
+    light.addEventListener('input', updateFilters);
+    shade.addEventListener('input', updateFilters);
+</script>
+
+</body>
+  </html>
