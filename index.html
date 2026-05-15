@@ -3,20 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CineFlow | Pro Movie Engine</title>
+    <title>CineFlow | Professional Movie Workstation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #000000;
-            --panel: #121212;
-            --accent: #00ff88; /* ಪ್ರೊಫೆಷನಲ್ ಗ್ರೀನ್ */
-            --border: #252525;
+            --bg-black: #050505;
+            --panel-grey: #121212;
+            --accent-green: #00ff88;
+            --border-color: #222;
+            --text-dim: #666;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body { 
-            background: var(--bg); 
-            color: #fff; 
+            background: var(--bg-black); 
+            color: #ffffff; 
             font-family: 'Inter', sans-serif; 
             margin: 0; 
             height: 100vh; 
@@ -25,155 +27,263 @@
             overflow: hidden;
         }
 
-        /* Top Navigation - ಫೋನ್‌ನಲ್ಲಿ ನೀಟಾಗಿ ಕಾಣಲು */
+        /* Top Navigation Bar */
         header { 
-            height: 50px; 
-            background: var(--panel); 
+            height: 55px; 
+            background: var(--panel-grey); 
             display: flex; 
             align-items: center; 
-            padding: 0 15px; 
-            border-bottom: 1px solid var(--border);
+            padding: 0 20px; 
+            border-bottom: 1px solid var(--border-color);
             justify-content: space-between;
+            z-index: 100;
         }
 
-        .brand { font-weight: 900; color: var(--accent); letter-spacing: 2px; font-size: 18px; }
+        .brand { font-weight: 900; color: var(--accent-green); letter-spacing: 3px; font-size: 20px; }
+        .engine-status { font-size: 9px; background: #1a1a1a; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--accent-green); color: var(--accent-green); font-weight: bold; }
 
-        /* Workspace Setup */
-        #workspace { 
+        /* Main Editing Workspace */
+        main { 
             flex: 1; 
             display: flex; 
-            flex-direction: column; /* ಫೋನ್‌ಗಾಗಿ ವರ್ಟಿಕಲ್ ಲೇಔಟ್ */
+            flex-direction: column; 
+            overflow: hidden;
         }
 
-        /* ದೊಡ್ಡ ಸಿನಿಮಾ ಸ್ಕ್ರೀನ್ (The Stage) */
-        #monitor { 
-            flex: 2; 
-            background: #050505; 
+        /* Professional Master Monitor */
+        #monitor-section { 
+            flex: 1.2; 
+            background: #000; 
             position: relative; 
             display: flex; 
             align-items: center; 
             justify-content: center;
-            border: 2px solid #111;
-            margin: 5px;
-            border-radius: 8px;
+            padding: 10px;
+        }
+
+        #viewfinder {
+            width: 100%;
+            max-width: 800px;
+            aspect-ratio: 16/9;
+            background: #080808;
+            border: 1px solid #333;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,1);
             overflow: hidden;
         }
 
-        #video-canvas {
-            width: 90%;
-            aspect-ratio: 16/9;
-            background: #000;
-            box-shadow: 0 0 30px rgba(0,255,136,0.1);
-            position: relative;
-        }
-
-        /* ಪ್ರೊಫೆಷನಲ್ ಟೂಲ್ ಬಾಕ್ಸ್ (FL Studio Style) */
-        #controls { 
-            flex: 1; 
-            background: var(--panel); 
-            padding: 15px; 
-            border-top: 1px solid var(--border);
-            overflow-y: auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .control-unit { background: #1a1a1a; padding: 10px; border-radius: 5px; border: 1px solid #222; }
-        label { display: block; font-size: 10px; color: #666; margin-bottom: 5px; text-transform: uppercase; }
-        
-        input[type=range] { width: 100%; accent-color: var(--accent); }
-
-        /* Timeline - ಸಿನಿಮಾದ ಉದ್ದ ಅಳೆಯಲು */
-        #timeline {
-            height: 80px;
-            background: #0a0a0a;
-            border-top: 1px solid var(--border);
+        /* Movable Asset Overlay */
+        #main-actor {
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 255, 136, 0.2);
+            border: 2px solid var(--accent-green);
+            border-radius: 4px;
+            position: absolute;
+            top: 30%;
+            left: 30%;
+            cursor: move;
             display: flex;
             align-items: center;
-            padding: 0 10px;
+            justify-content: center;
+            font-size: 8px;
+            font-weight: bold;
+            color: var(--accent-green);
+        }
+
+        /* Station Controls (Sidebar/Bottom Panel) */
+        #control-hub { 
+            flex: 1; 
+            background: var(--panel-grey); 
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .hub-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .control-card {
+            background: #181818;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #222;
+        }
+
+        .control-card label {
+            display: block;
+            font-size: 10px;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        input[type=range] { width: 100%; accent-color: var(--accent-green); cursor: pointer; }
+
+        /* Professional Timeline */
+        #timeline-container {
+            height: 90px;
+            background: #0a0a0a;
+            border-top: 1px solid #222;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
             gap: 5px;
         }
 
-        .track-block { height: 40px; background: #1a1a1a; border: 1px solid var(--accent); flex: 1; border-radius: 3px; position: relative; }
-        .track-block::after { content: 'CLIP 01'; position: absolute; font-size: 8px; color: var(--accent); top: 15px; left: 10px; }
+        .timeline-header { font-size: 9px; color: var(--text-dim); display: flex; justify-content: space-between; }
+        
+        .track {
+            height: 45px;
+            background: #111;
+            border: 1px dashed #333;
+            border-radius: 4px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 0 5px;
+        }
 
-        /* ದೊಡ್ಡ ಆಪ್ಶನ್ ಬಟನ್ */
-        .render-now {
-            grid-column: span 2;
-            background: var(--accent);
+        .clip {
+            width: 40%;
+            height: 35px;
+            background: linear-gradient(90deg, #00ff88 0%, #0088ff 100%);
+            border-radius: 3px;
+            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            font-size: 9px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        /* Big Action Button */
+        .master-btn {
+            background: var(--accent-green);
             color: #000;
             border: none;
-            padding: 15px;
-            font-weight: bold;
-            border-radius: 5px;
+            padding: 18px;
+            font-weight: 900;
+            border-radius: 8px;
             text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            margin-top: auto;
+        }
+
+        /* Mobile Utility */
+        @media (max-width: 600px) {
+            .hub-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="brand">CINEFLOW PRO</div>
-    <div style="font-size: 10px; background: #222; padding: 4px 8px; border-radius: 3px;">4K ENGINE</div>
+    <div class="brand">CINEFLOW</div>
+    <div class="engine-status">RAW 8K READY</div>
 </header>
 
-<div id="workspace">
-    <div id="monitor">
-        <div id="video-canvas">
-            <div id="actor" style="width: 50px; height: 50px; background: var(--accent); position: absolute; top: 20%; left: 20%; border-radius: 50%; cursor: move; box-shadow: 0 0 15px var(--accent);"></div>
+<main>
+    <section id="monitor-section">
+        <div id="viewfinder">
+            <div id="main-actor">ACTOR_01</div>
+            <div style="position: absolute; bottom: 5px; right: 10px; font-size: 8px; color: #444;">16:9 PRO-RES</div>
         </div>
-        <div style="position: absolute; top: 10px; left: 10px; font-size: 10px; color: #333;">MASTER MONITOR - 24FPS</div>
-    </div>
+    </section>
 
-    <div id="controls">
-        <div class="control-unit">
-            <label>Master Exposure</label>
-            <input type="range" id="exp">
+    <section id="control-hub">
+        <div class="hub-grid">
+            <div class="control-card">
+                <label>Dynamic Exposure</label>
+                <input type="range" id="exp" min="50" max="150" value="100">
+            </div>
+            <div class="control-card">
+                <label>Cinematic LUT</label>
+                <input type="range" id="lut" min="0" max="100" value="20">
+            </div>
+            <div class="control-card">
+                <label>VFX Grain</label>
+                <input type="range" id="vfx" min="0" max="100" value="0">
+            </div>
+            <div class="control-card">
+                <label>Frame Motion</label>
+                <input type="range" id="motion" min="0" max="100" value="50">
+            </div>
         </div>
-        <div class="control-unit">
-            <label>Color Grade</label>
-            <input type="range" id="grade">
-        </div>
-        <div class="control-unit">
-            <label>VFX Intensity</label>
-            <input type="range" id="vfx">
-        </div>
-        <div class="control-unit">
-            <label>Layer Depth</label>
-            <input type="range" id="depth">
-        </div>
-        <button class="render-now">Start 8K Render</button>
-    </div>
-</div>
 
-<div id="timeline">
-    <div style="font-size: 10px; color: #444; width: 40px;">00:00</div>
-    <div class="track-block"></div>
-    <div class="track-block" style="border-color: #555;"></div>
-</div>
+        <div id="timeline-container">
+            <div class="timeline-header">
+                <span>MASTER_TIMELINE</span>
+                <span>00:00:12:04</span>
+            </div>
+            <div class="track">
+                <div class="clip">SCENE_01_RETAKE</div>
+            </div>
+        </div>
+
+        <button class="master-btn">Export Final Render</button>
+    </section>
+</main>
 
 <script>
-    // ಫೋನ್‌ನಲ್ಲಿ ಟಚ್ ಮಾಡಿ ಮೂವ್ ಮಾಡುವ ಫೀಚರ್ (Touch Support)
-    const actor = document.getElementById('actor');
-    let isDragging = false;
+    const actor = document.getElementById('main-actor');
+    let active = false;
 
-    function move(e) {
-        if (!isDragging) return;
-        let x = (e.type === 'touchmove') ? e.touches[0].clientX : e.clientX;
-        let y = (e.type === 'touchmove') ? e.touches[0].clientY : e.clientY;
-        
-        actor.style.left = (x - 25) + 'px';
-        actor.style.top = (y - 70) + 'px';
+    // Pro-Touch Movement Engine
+    function startDrag(e) {
+        active = true;
     }
 
-    actor.addEventListener('mousedown', () => isDragging = true);
-    actor.addEventListener('touchstart', () => isDragging = true);
-    window.addEventListener('mouseup', () => isDragging = false);
-    window.addEventListener('touchend', () => isDragging = false);
+    function endDrag() {
+        active = false;
+    }
+
+    function move(e) {
+        if (!active) return;
+        e.preventDefault();
+        
+        let x, y;
+        if (e.type === 'touchmove') {
+            x = e.touches[0].clientX;
+            y = e.touches[0].clientY;
+        } else {
+            x = e.clientX;
+            y = e.clientY;
+        }
+
+        // Calculation for center-aligned movement
+        actor.style.left = (x - 30) + 'px';
+        actor.style.top = (y - 120) + 'px';
+    }
+
+    // Event Listeners for Mobile & PC
+    actor.addEventListener('mousedown', startDrag);
+    actor.addEventListener('touchstart', startDrag);
+    window.addEventListener('mouseup', endDrag);
+    window.addEventListener('touchend', endDrag);
     window.addEventListener('mousemove', move);
-    window.addEventListener('touchmove', move);
+    window.addEventListener('touchmove', move, { passive: false });
+
+    // Filter Processing
+    const exp = document.getElementById('exp');
+    const lut = document.getElementById('lut');
+    
+    function processFrames() {
+        actor.style.filter = `brightness(${exp.value}%) contrast(${100 + parseInt(lut.value)}%)`;
+    }
+
+    exp.addEventListener('input', processFrames);
+    lut.addEventListener('input', processFrames);
 </script>
 
 </body>
-</html>
+    </html>
