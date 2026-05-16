@@ -2,46 +2,63 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>CineFlow AI</title>
+<title>CineFlow AI Studio</title>
 
 <style>
 body{
     font-family: Arial;
-    background:#111;
-    color:white;
+    background:#0f0f0f;
+    color:#fff;
+    margin:0;
+    padding:0;
+}
+
+.header{
+    background:#1f1f1f;
+    padding:15px;
     text-align:center;
-    padding:20px;
+    font-size:20px;
+    font-weight:bold;
 }
 
 .container{
-    max-width:500px;
+    max-width:600px;
     margin:auto;
-    background:#1e1e1e;
     padding:20px;
+}
+
+.card{
+    background:#1c1c1c;
+    padding:15px;
     border-radius:10px;
+    margin-top:15px;
 }
 
 input{
-    width:90%;
+    width:100%;
     padding:12px;
-    margin:10px 0;
+    margin-top:10px;
+    border-radius:5px;
+    border:none;
 }
 
 button{
-    padding:12px 20px;
+    width:100%;
+    padding:12px;
+    margin-top:10px;
     background:#00c853;
     border:none;
     color:white;
+    font-size:16px;
     cursor:pointer;
+    border-radius:5px;
 }
 
 pre{
-    text-align:left;
+    white-space:pre-wrap;
     background:#000;
     padding:10px;
     border-radius:8px;
-    overflow:auto;
 }
 </style>
 
@@ -49,20 +66,31 @@ pre{
 
 <body>
 
+<div class="header">
+CineFlow AI Studio
+</div>
+
 <div class="container">
 
-<h2>CineFlow AI</h2>
+<div class="card">
 
-<input id="text" placeholder="Enter your idea..." />
-<br>
-<button onclick="generate()">Generate</button>
+<h3>ನಿನ್ನ ಕಥೆ ಬರೆಯು</h3>
 
-<pre id="output"></pre>
+<input id="text" placeholder="ಉದಾ: ಗ್ರಾಮದ ಹುಡುಗ ಸ್ಟಾರ್ ಆಗ್ತಾನೆ" />
+
+<button onclick="generate()">Create Story</button>
+
+</div>
+
+<div class="card">
+<pre id="output">Output ಇಲ್ಲಿ ಕಾಣಿಸುತ್ತದೆ...</pre>
+</div>
 
 </div>
 
 <script>
 async function generate(){
+
     let text = document.getElementById("text").value;
 
     let res = await fetch("YOUR_BACKEND_URL/generate", {
@@ -74,10 +102,10 @@ async function generate(){
     let data = await res.json();
 
     document.getElementById("output").innerText =
-    "SCRIPT:\n" + data.script + "\n\n" +
-    "MEME:\n" + data.meme + "\n\n" +
-    "CAPTION:\n" + data.caption + "\n\n" +
-    "HASHTAGS:\n" + data.hashtags;
+"📜 STORY:\n" + data.script + "\n\n" +
+"🎭 MEME IDEA:\n" + data.meme + "\n\n" +
+"📱 CAPTION:\n" + data.caption + "\n\n" +
+"🔥 HASHTAGS:\n" + data.hashtags;
 }
 </script>
 
