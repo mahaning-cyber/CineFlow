@@ -1,60 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VillageMind AI - Global Video Engine</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #020617; color: white; text-align: center; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: #0f172a; padding: 40px; border-radius: 20px; border: 1px solid #1e293b; }
-        h1 { color: #00d2ff; font-size: 3rem; text-shadow: 0 0 10px #00d2ff; }
-        input { width: 90%; padding: 15px; border-radius: 10px; border: 1px solid #334155; background: #1e293b; color: white; margin-bottom: 20px; font-size: 1.1rem; }
-        button { background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%); color: white; padding: 15px 35px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { transform: scale(1.05); box-shadow: 0 0 20px #00d2ff; }
-        
-        /* ವಿಡಿಯೋ ಕಾಣುವ ಬಾಕ್ಸ್ */
-        #videoContainer { margin-top: 30px; position: relative; border-radius: 15px; overflow: hidden; border: 3px solid #334155; display: none; }
-        img { width: 100%; height: auto; display: block; }
-        .loading-text { color: #94a3b8; font-style: italic; }
-    </style>
+    <title>AI Meme Factory</title>
 </head>
 <body>
 
-<div class="container">
-    <h1>VillageMind AI</h1>
-    <p>The Global Video Generation Engine - From a Village to the World</p>
-    
-    <input type="text" id="promptInput" placeholder="Enter your vision (e.g., A flying village in the clouds)...">
-    <br>
-    <button onclick="generateAI()">GENERATE GLOBAL VIDEO</button>
+<h1>🔥 AI Meme Factory</h1>
 
-    <div id="videoContainer">
-        <p class="loading-text">Generating Frames via Distributed Global Nodes...</p>
-        <img id="videoOutput" src="" alt="AI Video Engine">
-    </div>
-</div>
+<input id="text" placeholder="Enter idea..." />
+<button onclick="generate()">Generate</button>
+
+<pre id="output"></pre>
 
 <script>
-    function generateAI() {
-        const prompt = document.getElementById('promptInput').value;
-        const container = document.getElementById('videoContainer');
-        const output = document.getElementById('videoOutput');
+async function generate(){
+    let text = document.getElementById("text").value;
 
-        if(!prompt) { alert("Please enter a prompt!"); return; }
+    let res = await fetch("YOUR_BACKEND_URL/generate", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({text})
+    });
 
-        container.style.display = 'block';
-        output.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJndzRndzRndzRndzRndzRndzRndzRndzRndzRndzRndzRndzRndzRndzJm0vMTUwaS9n/loading.gif"; // ಲೋಡಿಂಗ್ ಗಿಫ್
+    let data = await res.json();
 
-        const seed = Math.floor(Math.random() * 10**10);
-        
-        // ಗೂಗಲ್‌ಗಿಂತ ವಿಭಿನ್ನವಾಗಿ ನಾವು ಅನ್‌ಲಿಮಿಟೆಡ್ 'Motion' ಲಿಂಕ್ ಬಳಸುತ್ತಿದ್ದೇವೆ
-        const globalVideoLink = `https://pollinations.ai/p/${encodeURIComponent(prompt)}?width=1024&height=1024&seed=${seed}&model=video&nologo=true`;
-        
-        // ವಿಡಿಯೋ ಎಂಜಿನ್ ಅನ್ನು ಅಪ್‌ಡೇಟ್ ಮಾಡುವುದು
-        setTimeout(() => {
-            output.src = globalVideoLink;
-        }, 1000);
-    }
+    document.getElementById("output").innerText =
+        data.script + "\n\n" +
+        data.meme + "\n\n" +
+        data.caption + "\n\n" +
+        data.hashtags;
+}
 </script>
 
 </body>
